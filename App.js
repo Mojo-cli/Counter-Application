@@ -1,14 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
+import CounterApp from './src/CounterApp';
+
+const initialState ={ 
+  counter:0
+}
+
+const reducer = ( state = initialState, action) => {
+  switch(action.type){
+    case "INCREASE_COUNTER" : return {counter:state.counter + 1}
+    case "DECREASE_COUNTER" : return { counter:state.counter - 1 }
+  }
+  return state;
+}
+const store = createStore(reducer);
+
+export default class App extends React.Component{
+  render(){
+
+    return (
+      <View style={styles.container}>
+        <Provider store={store}>
+          <CounterApp />
+        </Provider>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
